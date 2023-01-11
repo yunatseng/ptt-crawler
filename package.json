@@ -12,6 +12,7 @@
   },
   "scripts": {
     "start": "node examples/demo.js",
+    "start:write2db": "node examples/write2db.js",
     "test": "jest --detectOpenHandles",
     "lint": "eslint index.js lib/**/*.js test/**/*.js examples/**/*.js"
   },
