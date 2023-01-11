@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/WayneChang65/ptt-crawler#readme",
   "dependencies": {
+    "mongodb": "^4.13.0",
     "puppeteer": "^18.2.1"
   },
   "devDependencies": {
