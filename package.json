@@ -11,8 +11,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "start": "node examples/demo.js",
-    "start:write2db": "node examples/write2db.js",
+    "start": "node examples/write2db.js",
     "test": "jest --detectOpenHandles",
     "lint": "eslint index.js lib/**/*.js test/**/*.js examples/**/*.js"
   },
@@ -34,7 +33,10 @@
   "homepage": "https://github.com/WayneChang65/ptt-crawler#readme",
   "dependencies": {
     "mongodb": "^4.13.0",
-    "puppeteer": "^18.2.1"
+    "puppeteer": "^18.2.1",
+    "puppeteer-extra": "^3.3.4",
+    "puppeteer-extra-plugin-stealth": "^2.11.1",
+    "random-useragent": "^0.5.0"
   },
   "devDependencies": {
     "eslint": "^8.25.0",

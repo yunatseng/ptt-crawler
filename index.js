@@ -1,1 +1,4 @@
-module.exports = require('./lib/ptt_crawler');
+module.exports = {
+	pttCrawler: require('./lib/ptt-crawler'),
+	dcardCrawler: require('./lib/dcard-crawler'),
+};
