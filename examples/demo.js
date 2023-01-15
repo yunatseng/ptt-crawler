@@ -1,5 +1,5 @@
 'use strict';
-const ptt_crawler = require('../index.js');
+const { pttCrawler: ptt_crawler } = require('../index.js');
 main();
 
 async function main(){
