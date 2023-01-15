@@ -15,5 +15,5 @@ docker run -p 27017:27017 --name mongo-local mongo:latest
 1. Run the command
 
 ```sh
-npm run start:write2db
+npm run start
 ```
