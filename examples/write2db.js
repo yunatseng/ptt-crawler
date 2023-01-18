@@ -2,7 +2,6 @@
 
 const { 
 	pttCrawler,
-	dcardCrawler
 } = require('../index.js');
 const {
 	getDbClient,
@@ -17,14 +16,11 @@ async function main() {
 	const dbName = 'crawler_result';
 	const db = dbClient.db(dbName);
 
-	/** 關鍵字列表 */
-	const keywords = ['國泰', '大樹'];
-
 	console.log('---開始爬 PTT---');
 
 	/** 集合（表）名稱 */
-	let collectionName = 'ptt';
-	let collection = db.collection(collectionName);
+	const collectionName = 'ptt';
+	const collection = db.collection(collectionName);
 
 	// 初始爬蟲
 	await pttCrawler.initialize({
@@ -50,6 +46,8 @@ async function main() {
 		const posts = parse2Posts(result);
 		console.log(`爬完 ${board} 版 ${pages} 頁，結果共 ${posts.length} 篇`, /* posts */);
 
+		/** 關鍵字列表 */
+		const keywords = ['國泰', '大樹'];
 		// 依關鍵過濾貼文列表
 		const filteredPosts = filterPosts({ posts, keywords });
 		console.log(`原 ${posts.length} 篇，根據 ${keywords.join('、')} 過濾完後剩 ${filteredPosts.length} 篇`);
@@ -58,39 +56,9 @@ async function main() {
 		console.log(`寫入 ${dbName}/${collectionName} 表成功`, res);
 	} catch (error) {
 		console.error('爬 PTT 失敗', error);
-	} finally {
-		await pttCrawler.close();
 	}
 
-	console.log('---開始爬 Dcard---');
-
-	/** 集合（表）名稱 */
-	collectionName = 'dcard';
-	collection = db.collection(collectionName);
-
-	await dcardCrawler.init({
-		headless: false,
-	});
-
-	try {
-		/** 保險看版 */
-		const forum = 'insurance';
-		console.log(`開始爬 ${forum} 看版`);
-
-		const posts = await dcardCrawler.getResult({
-			forum,
-			keywords,
-		});
-		console.log(`爬完 ${forum} 看版，根據 ${keywords.join('、')}，結果共 ${posts.length} 篇`, /* posts */);
-		
-		const res = await collection.insertMany(posts);
-		console.log(`寫入 ${dbName}/${collectionName} 表成功`, res);
-	} catch (error) {
-		console.error('爬 Dcard 失敗', error);
-	} finally {
-		await dcardCrawler.close();
-	}
-
+	await pttCrawler.close();
 	await dbClient.close();
 }
 

@@ -2,12 +2,35 @@ const { MongoClient } = require('mongodb');
 
 /** 轉成貼文列表 Post[] e.g. [{ title: '...', url: '...' }, ...] */
 function parse2Posts(result = {}) {
+	const extractType = (title = '') => {
+		const results = /\[(.*?)\]/g.exec(title);
+		return (results && results[1]) || null;
+	};
+	const extractDetail = (text = '') => {
+		const timeStampRegExp = /([a-zA-Z]{3}\s.*\s\d{2}\s\d{2}:\d{2}:\d{2}\s\d{4})/;
+		const date = timeStampRegExp.exec(text)[1];
+		const cleanText = text
+			.replace(/[\n\r]/g, '')
+			.replace(new RegExp(`作者.*看板.*標題.*時間${timeStampRegExp.source}`), '');
+		const [content, comments] = cleanText.split('--※');
+
+		return {
+			content,
+			comments: `※${comments}`,
+			date,
+		};
+	};
+
 	const posts = [];
 	Object.entries(result).forEach(([key, values]) => {
-		values.forEach((value, index) => {
+		const newKey = key.slice(0, -1);
+		values.forEach((value = '', index = 0) => {
 			posts[index] = {
 				...posts[index],
-				[key.slice(0, -1)]: value 
+				[newKey]: value,
+
+				...(newKey === 'title' ? { type: extractType(value) } : {}),
+				...(newKey === 'content' ? extractDetail(value): {})
 			};
 		});
 	});
